@@ -17,9 +17,9 @@ int main() {
     bn::fixed speed = 1.5;
 
     bn::fixed dy = 0;
-    bn::fixed gravity = .03;
+    bn::fixed gravity = .5;
 
-    bn::fixed jump_strength = 1.3;
+    bn::fixed jump_strength = 22;
 
     while(true) {
         if(bn::keypad::left_held()) {
