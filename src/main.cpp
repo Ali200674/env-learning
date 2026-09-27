@@ -14,7 +14,9 @@ int main() {
 
     bn::backdrop::set_color(bn::color(15, 0, 0));
 
-    auto dot = bn::sprite_items::bun.create_sprite(0, 0);
+    auto dot = bn::sprite_items::bun.create_sprite(-20, 0);
+
+    auto dot2 = bn::sprite_items::bun.create_sprite(20, 0);
 
     bn::fixed speed = 1.5;
     bn::fixed dy = 0;
@@ -32,10 +34,16 @@ int main() {
         if(bn::keypad::left_held()) {
             dot.set_x(dot.x() - speed);
             dot.set_horizontal_flip(false);
+
+            dot2.set_x(dot2.x() + speed);
+            dot2.set_horizontal_flip(true);
         }
         if(bn::keypad::right_held()) {
             dot.set_x(dot.x() + speed);
             dot.set_horizontal_flip(true);
+
+            dot2.set_x(dot2.x() - speed);
+            dot2.set_horizontal_flip(false);
         }
         if(bn::keypad::a_pressed() && dot.y() == currentFloor) {
             dy -= jump_strength;
@@ -45,10 +53,17 @@ int main() {
         if (dot.x() > horizontalLimit) {
             dot.set_x(horizontalLimit);
         }
+        if (dot2.x() > horizontalLimit) {
+            dot2.set_x(horizontalLimit);
+        }
 
         // If the player touches the left horizontal limit, stop them
-         if (dot.x() < -horizontalLimit) {
+        if (dot.x() < -horizontalLimit) {
             dot.set_x(-horizontalLimit);
+        }
+
+        if (dot2.x() < -horizontalLimit) {
+            dot2.set_x(-horizontalLimit);
         }
 
         if (bn::keypad::down_pressed()) {
@@ -63,6 +78,7 @@ int main() {
         dy += gravity;
 
         dot.set_y(dot.y() + dy);
+        dot2.set_y(dot.y() - dy);
 
         // If the current floor level is for the normal gravity AND if we are more than the floor level, keep them at the floor level
         if(currentFloor == FLOOR && dot.y() > currentFloor) {
