@@ -4,6 +4,7 @@
 #include <bn_sprite_ptr.h>
 #include <bn_music.h>
 
+
 #include "bn_sprite_items_bun.h"
 
 #define FLOOR (80 - 8)
@@ -18,11 +19,10 @@ int main() {
     bn::fixed speed = 1.5;
 
     bn::fixed dy = 0;
-    bn::fixed gravity = .01;
+    bn::fixed gravity = .03;
 
     bn::fixed jump_strength = 1.2;
 
-    
     while(true) {
 
         if(bn::keypad::left_held()) {
@@ -35,6 +35,11 @@ int main() {
             dy -= jump_strength;
         }
 
+        if (bn::keypad::down_pressed()) {
+            gravity = -gravity;
+            dot.set_vertical_flip(true);
+        }
+
         dy += gravity;
 
         dot.set_y(dot.y() + dy);
@@ -43,6 +48,7 @@ int main() {
             dot.set_y(FLOOR);
             dy = 0;
         }
+
         bn::core::update();
     }
 }
