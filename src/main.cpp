@@ -28,8 +28,9 @@ int main() {
 
     int horizontalLimit = 110;
 
+    dot2.set_vertical_flip(true);
 
-    while(true) {
+    while(true) {        
 
         if(bn::keypad::left_held()) {
             dot.set_x(dot.x() - speed);
@@ -53,22 +54,27 @@ int main() {
         if (dot.x() > horizontalLimit) {
             dot.set_x(horizontalLimit);
         }
-        if (dot2.x() > horizontalLimit) {
-            dot2.set_x(horizontalLimit);
-        }
-
-        // If the player touches the left horizontal limit, stop them
+         // If the player touches the left horizontal limit, stop them
         if (dot.x() < -horizontalLimit) {
             dot.set_x(-horizontalLimit);
         }
-
+        
+        if (dot2.x() > horizontalLimit) {
+            dot2.set_x(horizontalLimit);
+        }
         if (dot2.x() < -horizontalLimit) {
             dot2.set_x(-horizontalLimit);
         }
 
+       
+
+        
+
         if (bn::keypad::down_pressed()) {
             gravity = -gravity;
+
             dot.set_vertical_flip(!dot.vertical_flip());
+            dot2.set_vertical_flip(!dot2.vertical_flip());
 
             // If the current floor level is the floor for normal gravity, turn the floor into negative for inverse gravity, else
             // keep it as the normal floor
@@ -78,16 +84,31 @@ int main() {
         dy += gravity;
 
         dot.set_y(dot.y() + dy);
-        dot2.set_y(dot.y() - dy);
+        dot2.set_y(dot2.y() - dy);
 
-        // If the current floor level is for the normal gravity AND if we are more than the floor level, keep them at the floor level
-        if(currentFloor == FLOOR && dot.y() > currentFloor) {
-            dot.set_y(FLOOR);
-            dy = 0;
-        // If the current floor level is for inverse gravity AND we are less than the floor level, keep them stuck at the floor level
-        } else if (currentFloor == -FLOOR && dot.y() < currentFloor){
-            dot.set_y(-FLOOR);
-            dy = 0;
+
+
+        if (currentFloor == FLOOR) {
+            if (dot.y() > currentFloor) {
+                dot.set_y(currentFloor);
+                dy = 0;
+            } 
+            
+            if (dot2.y() < -currentFloor) {
+                dot2.set_y(-currentFloor);
+                dy = 0;
+            }
+            
+        } else {
+            if (dot.y() < currentFloor) {
+                dot.set_y(currentFloor);
+                dy = 0;
+            } 
+            
+            if (dot2.y() > -currentFloor) {
+                dot2.set_y(-currentFloor);
+                dy = 0;
+            } 
         }
 
         bn::core::update();
