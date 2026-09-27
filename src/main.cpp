@@ -17,11 +17,13 @@ int main() {
     auto dot = bn::sprite_items::bun.create_sprite(0, 0);
 
     bn::fixed speed = 1.5;
-
     bn::fixed dy = 0;
     bn::fixed gravity = .03;
-
     bn::fixed jump_strength = 1.2;
+
+    int currentFloor = FLOOR;
+
+    int inverseFloor = -FLOOR;
 
     while(true) {
 
@@ -31,21 +33,30 @@ int main() {
         if(bn::keypad::right_held()) {
             dot.set_x(dot.x() + speed);
         }
-        if(bn::keypad::a_pressed() && dot.y() == FLOOR) {
+        if(bn::keypad::a_pressed() && dot.y() == currentFloor) {
             dy -= jump_strength;
         }
 
         if (bn::keypad::down_pressed()) {
             gravity = -gravity;
-            dot.set_vertical_flip(true);
+            dot.set_vertical_flip(!dot.vertical_flip());
+
+            // If the current floor level is the floor for normal gravity, turn the floor into inverseFloor, else
+            // keep it as the normal floor
+            currentFloor == FLOOR ? currentFloor = inverseFloor : currentFloor = FLOOR;
         }
 
         dy += gravity;
 
         dot.set_y(dot.y() + dy);
 
-        if(dot.y() > FLOOR) {
+        // If the current floor level is for the normal gravity AND if we are more than the floor level, keep them at the floor level
+        if(currentFloor == FLOOR && dot.y() > currentFloor) {
             dot.set_y(FLOOR);
+            dy = 0;
+        // If the current floor level is for inverse gravity and we are less than the floor level, keep them stuck at the floor level
+        } else if (currentFloor == inverseFloor && dot.y() < currentFloor){
+            dot.set_y(inverseFloor);
             dy = 0;
         }
 
