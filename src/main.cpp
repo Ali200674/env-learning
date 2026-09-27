@@ -21,17 +21,19 @@ int main() {
     bn::fixed gravity = .03;
     bn::fixed jump_strength = 1.2;
 
+    // Values for the floor level
     int currentFloor = FLOOR;
-
     int inverseFloor = -FLOOR;
 
     while(true) {
 
         if(bn::keypad::left_held()) {
             dot.set_x(dot.x() - speed);
+            dot.set_horizontal_flip(false);
         }
         if(bn::keypad::right_held()) {
             dot.set_x(dot.x() + speed);
+            dot.set_horizontal_flip(true);
         }
         if(bn::keypad::a_pressed() && dot.y() == currentFloor) {
             dy -= jump_strength;
@@ -54,7 +56,7 @@ int main() {
         if(currentFloor == FLOOR && dot.y() > currentFloor) {
             dot.set_y(FLOOR);
             dy = 0;
-        // If the current floor level is for inverse gravity and we are less than the floor level, keep them stuck at the floor level
+        // If the current floor level is for inverse gravity AND we are less than the floor level, keep them stuck at the floor level
         } else if (currentFloor == inverseFloor && dot.y() < currentFloor){
             dot.set_y(inverseFloor);
             dy = 0;
