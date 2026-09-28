@@ -32,6 +32,7 @@ int main() {
 
     while(true) {        
 
+        // If the user presses left, make the the normal bunny go left and the inverse bunny go right
         if(bn::keypad::left_held()) {
             dot.set_x(dot.x() - speed);
             dot.set_horizontal_flip(false);
@@ -39,6 +40,8 @@ int main() {
             dot2.set_x(dot2.x() + speed);
             dot2.set_horizontal_flip(true);
         }
+
+        // If the user presses right, make the the normal bunny go right and the inverse bunny go left
         if(bn::keypad::right_held()) {
             dot.set_x(dot.x() + speed);
             dot.set_horizontal_flip(true);
@@ -46,6 +49,8 @@ int main() {
             dot2.set_x(dot2.x() - speed);
             dot2.set_horizontal_flip(false);
         }
+
+        // If the user is on the floor level AND the user pressed x, make both bunnies jump
         if(bn::keypad::a_pressed() && dot.y() == currentFloor) {
             dy -= jump_strength;
         }
@@ -59,6 +64,7 @@ int main() {
             dot.set_x(-horizontalLimit);
         }
         
+        // Same idea as above but for the inverse bunny
         if (dot2.x() > horizontalLimit) {
             dot2.set_x(horizontalLimit);
         }
@@ -69,7 +75,7 @@ int main() {
        
 
         
-
+        // If the user pressed the down arrow key, invert the gravity, vertically flip the bunnies, and switch the current floor level
         if (bn::keypad::down_pressed()) {
             gravity = -gravity;
 
@@ -86,25 +92,31 @@ int main() {
         dot.set_y(dot.y() + dy);
         dot2.set_y(dot2.y() - dy);
 
-
-
+        // If the current floor level is normal
         if (currentFloor == FLOOR) {
+
+            // If the normal bunnies y level is more than the floor level, stop them and set dy to 0
             if (dot.y() > currentFloor) {
                 dot.set_y(currentFloor);
                 dy = 0;
             } 
             
+            // Same thing as above, but for inverse bunny and floor is negative
             if (dot2.y() < -currentFloor) {
                 dot2.set_y(-currentFloor);
                 dy = 0;
             }
             
-        } else {
+        } else { // Else, the floor is negative
+
+            // If normal bunnies y level is less than floor level, stop them and set dy to 0
             if (dot.y() < currentFloor) {
                 dot.set_y(currentFloor);
                 dy = 0;
             } 
-            
+
+
+            // Same thing, but opposite as above
             if (dot2.y() > -currentFloor) {
                 dot2.set_y(-currentFloor);
                 dy = 0;
